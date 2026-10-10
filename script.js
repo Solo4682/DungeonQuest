@@ -1,6 +1,19 @@
 const startButton = document.getElementById("start-button");
 const game = document.getElementById("game");
 
+const gameState = {
+    health : 100,
+
+    decisions : {
+        approachedGuardCalmly : false,
+        drewweapon : false
+    },
+
+    worldFlags : {
+        convenantSuspicion : 0
+    }
+};
+
 
 startButton.addEventListener("click", function () {
 
@@ -62,6 +75,9 @@ startButton.addEventListener("click", function () {
  const aggressiveChoice = document.getElementById ("aggressive-choice");
 
 calmChoice.addEventListener("click",function() {
+    
+    gameState.decisions.approachedGuardCalmly = true;
+
     game.innerHTML = `
     
     </h1> DUNMERE </h1>
@@ -86,6 +102,11 @@ calmChoice.addEventListener("click",function() {
 );
 
 aggressiveChoice.addEventListener("click", function() {
+
+    gameState.decisions.drewWeapon = true;
+
+    gameState.worldFlags.covenantSuspicion += 1;
+
     game.innerHTML = `
 
     <h1> DUNMERE </h1>

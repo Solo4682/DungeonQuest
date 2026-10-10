@@ -1,0 +1,20 @@
+Guy joins the game
+
+Learns about the previous story
+
+Is approached by the guard
+
+Given two choices : 1.speak calmly : 
+                                     Guy approaches the guard and says that he does not wish to argue
+                                     says he wanna resolve it peacefully
+                                     Guard hesitates but loosens his grip on the sword
+                                     guard asks him his name
+                                     Screen moves to charecter page
+
+                    2.also unsheath your weapon :
+                                    Guy also picks up his weapon
+                                    guard trembles, asks him to put his weapon down and that this would be his final warning
+                                    A loud, shrill voice from the darkness behind the guard tells them to put their weapons away
+                                    a hooded figure appears
+                                    
+
