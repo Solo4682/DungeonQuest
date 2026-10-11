@@ -2,7 +2,7 @@
 
 export const gameState = {
 
-    chareater : {
+    character : {
         name : ""
     },
 
@@ -10,10 +10,17 @@ export const gameState = {
 
     decisions : {
         approachedGuardCalmly : false,
-        drewweapon : false
+        drewWeapon : false,
+
+        explorationChoice : ""
+    },
+
+    discoveries: {
+        heardUndergroundBell : false,
+        learnedAboutCovenantRecords : false
     },
 
     worldFlags : {
-        covednantSuspicion : 0
+        covenantSuspicion : 0
     }
 };

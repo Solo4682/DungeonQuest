@@ -114,10 +114,10 @@ aggressiveChoice.addEventListener("click", function () {
         <p> "I'll deal with this one." </p>
         <p><em> 
                 Your journey has begun.
-        </p></em>
+        </em></p>
         <p><em>
                 But someone is watcing you.
-        </p></em>
+        </em></p>
         <br>
         <button id = "continue-button"> Continue </button>
     `;

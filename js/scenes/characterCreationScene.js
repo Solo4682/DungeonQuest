@@ -63,7 +63,7 @@ continueButton.addEventListener("click", function () {
     <p> </p>
     <p><em> Your past remains buried. For now. </em></p>
     <br>
-    <button id = "begin-exploration-buttpn"
+    <button id = "begin-exploration-button">
         Continue into Dunmere
     </button>
 
