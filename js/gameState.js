@@ -60,6 +60,10 @@ export const gameState = {
         recentForestMovement : false
     },
 
+    combat : {
+        isDefending : false
+    },
+
     worldFlags : {
         covenantSuspicion : 0
     }
