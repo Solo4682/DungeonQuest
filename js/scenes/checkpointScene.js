@@ -1,4 +1,4 @@
-import { gameState } from "../gameState/js";
+import { gameState } from "../gameState.js";
 
 export function showCheckpointScene(game) {
 
@@ -36,8 +36,8 @@ export function showCheckpointScene(game) {
 const inspectCartButton = 
     document.getElementById("inspect-cart-button");
 const inspectTracksButton =
-    document/getElementById("inspect-tracks-button");
-const inspectSuroundingsButton = 
+    document.getElementById("inspect-tracks-button");
+const inspectSurroundingsButton = 
     document.getElementById("inspect-surroundings-button");
 const checkpointResult = 
 document.getElementById("checkpoint-result");
@@ -45,7 +45,7 @@ document.getElementById("checkpoint-result");
 function lockChoices() {
     inspectCartButton.disabled = true;
     inspectTracksButton.disabled = true;
-    inspectSuroundingsButton.disabled = true;
+    inspectSurroundingsButton.disabled = true;
 }
 
 inspectCartButton.addEventListener("click" ,function () {
@@ -75,11 +75,11 @@ inspectTracksButton.addEventListener("click", function () {
     `;
 });
 
-inspectSuroundingsButton.addEventListener ("click", function () {
+inspectSurroundingsButton.addEventListener ("click", function () {
 
     lockChoices(); 
-    
-    checkpointResult.innerHTML = `'
+
+    checkpointResult.innerHTML = `
     
     <p> You study the trees surrounding the cart. a low branch has been freshly broken. </p>
     <p> Beyond it, the undergrowth has been disturbed. Something may have passes through here recently. </p>
