@@ -6,15 +6,15 @@ export const gameState = {
         name : "",
         level : 1,
         experience : 0,
-        experienceztoNextLevel : 100,
+        experienceToNextLevel : 100,
     },
 
     stats : {
         health : 100,
         maxHealth : 100,
 
-        stamina : 10,
-        maxStamina : 10,
+        stamina : 100,
+        maxStamina : 100,
 
         attack : 10,
         defence : 5
