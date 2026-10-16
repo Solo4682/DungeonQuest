@@ -1,4 +1,4 @@
-import {gameState} from "./gameState.js";
+import {gameState} from "../gameState.js";
 
 export function createEnemy() {
     return {
@@ -40,7 +40,7 @@ export function enemyAttack(enemy) {
     if (gameState.combat.isDefending) { damage = Math.ceil(damage/2);}
     
     gameState.stats.health = Math.max(0, gameState.stats.health - damage);
-    gameState.combat.isDefendng = false;
+    gameState.combat.isDefending = false;
 
     return {
         damage : damage,
@@ -74,3 +74,23 @@ export function observeEnemy(enemy) {
         enemyBehaviour : enemy.behaviour
     };
 }
+
+export function attemptFlee(enemy) {
+    if (enemy.health <= 0) {
+        return {
+            success : false,
+            message : "You cannot flee from a defeated enemy."
+        };
+    }
+    if (enemy.behaviour == "recovering") {
+        return {
+            success : true,
+            message : "You escape while the enemy recovers."
+        };
+    }
+    return {
+        success : false,
+        message : "The enemy prevents you escape."
+    };
+}
+
