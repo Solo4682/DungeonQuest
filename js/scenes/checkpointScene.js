@@ -1,4 +1,5 @@
 import { gameState } from "../gameState.js";
+import { showCombatScene } from "./combatScene.js";
 
 export function showCheckpointScene(game) {
 
@@ -33,14 +34,21 @@ export function showCheckpointScene(game) {
 
     `;
 
-const inspectCartButton = 
-    document.getElementById("inspect-cart-button");
-const inspectTracksButton =
-    document.getElementById("inspect-tracks-button");
-const inspectSurroundingsButton = 
-    document.getElementById("inspect-surroundings-button");
-const checkpointResult = 
-document.getElementById("checkpoint-result");
+const inspectCartButton = document.getElementById("inspect-cart-button");
+const inspectTracksButton = document.getElementById("inspect-tracks-button");
+const inspectSurroundingsButton = document.getElementById("inspect-surroundings-button");
+const checkpointResult = document.getElementById("checkpoint-result");
+
+function showContinueButton() {
+    const continueButton = document.createElement("button");
+    continueButton.textContent = "Continue along the road";
+
+    continueButton.addEventListener("click", function () {
+        showCombatScene(game);
+    });
+
+    checkpointResult.appendChild(continueButton);
+}
 
 function lockChoices() {
     inspectCartButton.disabled = true;
@@ -59,6 +67,8 @@ inspectCartButton.addEventListener("click" ,function () {
 
     <p><em> Clue discovered : The cart was struck. </em></p>
     `;
+
+    showContinueButton();
 });
 
 inspectTracksButton.addEventListener("click", function () {
@@ -73,6 +83,8 @@ inspectTracksButton.addEventListener("click", function () {
     <p><em> Clue discovered : Someone left the road. </em></p>
    
     `;
+
+    showContinueButton();
 });
 
 inspectSurroundingsButton.addEventListener ("click", function () {
@@ -85,5 +97,7 @@ inspectSurroundingsButton.addEventListener ("click", function () {
     <p> Beyond it, the undergrowth has been disturbed. Something may have passes through here recently. </p>
     <p><em> Clue discovered : Recent movement in the forest. </em></p>
     `;
+
+    showContinueButton();
 });
 }

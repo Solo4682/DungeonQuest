@@ -3,23 +3,25 @@ import {
     playerAttack,
     enemyAttack,
     defend,
-    observeEnemy
+    observeEnemy,
+    attemptFlee
 } from "../systems/combat.js";
 import { gameState } from "../gameState.js";
+import { useHealingPotion } from "../systems/inventory.js";
+import { showCheckpointScene } from "./checkpointScene.js";
 
-
-
-export function showCombatScene(game){
+export function showCombatScene(game) {
     const enemy = createEnemy() ;
     let combatOver = false;
+    let actionInProgress = false;
     game.innerHTML = `
     <h1> COMBAT </h1>
     
     <section id = "enemy-panel">
         <h2> Hollow sentinel </h2>
         <p id = "enemy-health"> Enemy Health : 80/80 </p> 
+        <p id = "enemy-intent"> The Sentinel watcches you carefully. </p>
     </section>
-    
     <section id = "player-panel">
         <h2 id = "hero-name"> The Survivor </h2>
         <p id = "player-health"> Health : 100/100 </p>
@@ -37,45 +39,195 @@ export function showCombatScene(game){
         </div>
     `;
 const attackButton = document.getElementById("attack-button");
+const defendButton = document.getElementById("defend-button");
+const observeButton = document.getElementById("observe-button");
+const fleeButton = document.getElementById("flee-button");
 
-attackButton.addEventListener("click", function() {
-    
-    if (combatOver) return;
-    
-    const result = playerAttack(enemy);
+const potionButton = document.createElement("button");
+potionButton.id = "potion-button";
+potionButton.textContent = "Use Healing Potion" ;
+document.getElementById("combat-actions").appendChild(potionButton);
 
-    if (result.defeated) {
-        combatOver = true;
+document.getElementById("hero-name").textContent = gameState.character.name || "The survivor";
 
-        document.getElementById("enemy-health").textContent = `
-            Enemy Health : 0 / ${enemy.maxHealth}`;
-        document.getElementById("combat-log").textContent = 
-            "The Hollow Sentinel collapses. You have won the battle!";
+function updateDisplay() {
+    document.getElementById("player-health").textContent = `Health: ${gameState.stats.health}/${gameState.stats.maxHealth}`;   
+    document.getElementById("player-stamina").textContent = `Stamina : ${gameState.stats.stamina}/${gameState.stats.maxStamina}`;
+    document.getElementById("enemy-health").textContent = `Enemy Health : ${enemy.health}/${enemy.maxHealth}`;
+}
 
-        return;
-    }
-    document.getElementById("enemy-health").textContent = `
-        Enemy Health : ${enemy.health}/${enemy.maxHealth}`;
-    document.getElementById("combat-log").textContent = `
-        You attack the Hollow Sentinel and deal ${result.damage} damage!`;
-
-
-    const enemyResult = enemyAttack(enemy);
-    if (enemyResult.defeated) {
+function endCombat(message) {
 
     combatOver = true;
 
-    document.getElementById("player-health").textContent = `
-        Health : 0 / ${gameState.stats.maxHealth}`;
-    document.getElementById("combat-log").textContent = 
-        "You collapse. The Hollow Sentiel has defeated you."
+    document.getElementById("combat-log").textContent = message;
 
+    attackButton.disabled = true;
+    defendButton.disabled = true;
+    observeButton.disabled = true;
+    fleeButton.disabled = true;
+    potionButton.disabled = true;
+
+    attackButton.style.display = "none";
+    defendButton.style.display = "none";
+    observeButton.style.display = "none";
+    fleeButton.style.display = "none";
+    potionButton.style.diplay = "none";
+
+}
+
+function enemyTurn() {
+    if(combatOver) return;
+
+    enemy.behaviour = "watching";
+
+    const result = enemyAttack(enemy);
+
+    if (result.defeated) {
+        updateDisplay();
+        endCombat("You collapse. The enemy has defeated you.");
+        return;
+    }
+
+    enemy.behaviour = "recovering";   
+    
+    const enemyIntent = document.getElementById("enemy-intent");
+
+    if(enemy.attacksMade % 3 == 2){
+        enemyIntent.textContent = "WARNING : The Sentinet is preparing a heavy attack!";
+    }
+    else{
+        enemyIntent.textContent = "The Sentinel is recovering from its attack.";
+    }
+
+    updateDisplay();
+    document.getElementById("combat-log").textContent += `\n The ${enemy.name} attacks you for ${result.damage} damage. `;
+
+    if(result.isHeavyAttack) {
+        combatLog.textContent  += `\n The Sentinel unleashes a powerful heavy strike!`;
+    }
+
+}
+updateDisplay();
+
+attackButton.addEventListener("click", function () {
+    if(combatOver || actionInProgress) return;
+
+    actionInProgress = true;
+    attackButton.disabled = true;
+
+    const result = playerAttack(enemy);
+
+    if (result.success == false) {
+        document.getElementById ("combat-log").textContent = result.message;
+        updateDisplay() ;
+        actionInProgress = false;
+        attackButton.disabled = false;
+        return;
+    }
+    updateDisplay();
+
+    if(result.defeated){
+        gameState.worldFlags.hollowSentinelDefeated = true;
+        endCombat(` The ${enemy.name} has been defeated!`);
+
+        const continueButton = document.createElement("button");
+        continueButton.textContent = "Continue";
+
+        continueButton.addEventListener("click", function() {
+            showCheckpointScene(game);
+        });
+        document.getElementById("combat-actions").appendChild(continueButton);
+        
+        return;
+
+    }
+
+    document.getElementById("combat-log").textContent = `You deal ${result.damage} damage to the ${enemy.name}.\n`;
+
+    enemyTurn();
+
+    actionInProgress = false;
+    attackButton.disabled = false;
+});
+
+defendButton.addEventListener("click", function () {
+    if(combatOver || actionInProgress) return;
+
+    actionInProgress = true;
+
+    const result = defend();
+
+    document.getElementById("combat-log").textContent = 
+        result.message;
+
+    enemyTurn();
+
+    actionInProgress = false;
+});
+
+observeButton.addEventListener("click", function () {
+    if (combatOver || actionInProgress) return;
+
+    actionInProgress = true;
+
+    const result = observeEnemy(enemy);
+
+    document.getElementById("combat-log").textContent = result.message;
+
+    enemyTurn();
+
+    actionInProgress = false;
+});
+
+potionButton.addEventListener("click", function (){
+    if(combatOver || actionInProgress) return;
+    actionInProgress = true;
+
+    const result = useHealingPotion();
+
+    document.getElementById("combat-log").textContent = result.message;
+
+    if(!result.success){
+        actionInProgress = false;
     return;
     }
-    
-    document.getElementById("player-health").textContent = `
-        Health ${enemyResult.playerHealth} / ${gameState.stats.maxHealth}`;
-    document.getElementById("combat-log").textContent += `
-        The Hollow Sentinel attacks you for ${enemyResult.damage} damage!`;
-    });
+
+    updateDisplay();
+    enemyTurn();
+
+    actionInProgress = false;
+
+});
+
+fleeButton.addEventListener("click", function () {
+    if(combatOver || actionInProgress) return;
+
+    actionInProgress = true;
+
+    const result = attemptFlee(enemy);
+
+    document.getElementById("combat-log").textContent = result.message;
+
+    if(result.success) {
+        endCombat (" You have succesfully escaped the encounter.\n" +"The road lies ahead.");
+
+        const continueButton = document.createElement("button");
+        continueButton.textContent = "Continue";
+
+        continueButton.addEventListener("click", function () {
+            showCheckpointScene(game);
+        });
+
+        document.getElementById("combat-actions").appendChild(continueButton);
+        return;
+
+    }
+
+    enemyTurn();
+
+    actionInProgress = false;
+});
+
+
 }

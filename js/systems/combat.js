@@ -7,21 +7,37 @@ export function createEnemy() {
 
         health : 80,
         maxHealth : 80,
-
         attack : 12,
         defence : 4,
-
         stamina : 100,
-
-        behaviour : "watching"
+        behaviour : "watching",
+        attacksMade : 0
     };
 }
 
 export function playerAttack(enemy) {
+     const attackCost = 15;
+
+    if(gameState.stats.stamina < attackCost) {
+        return {
+            success : false,
+            message : "You are too exhausted to attack.",
+            damage : 0,
+            enemyHealth : enemy.health,
+            defeated : false
+        };
+    }
+    gameState.stats.stamina -= attackCost;
 
     const weaponBonus = gameState.equipment.weapon.attackBonus;
     const totalAttack = gameState.stats.attack + weaponBonus;
-    const damage = Math.max(1, totalAttack - enemy.defence);
+  
+    let damage = Math.max(1, totalAttack - enemy.defence);
+
+    if (gameState.combat.enemyObserved){
+        damage += 8;
+        gameState.combat.enemyObserved = false;
+    }
 
     enemy.health = Math.max(0, enemy.health - damage);
 
@@ -35,8 +51,16 @@ export function playerAttack(enemy) {
 export function enemyAttack(enemy) {
 
     const playerDefence = gameState.stats.defence + gameState.equipment.armour.defenceBonus;
+
+    enemy.attacksMade++;
+
+    const isheavyAttack = enemy.attacksMade % 3 == 0
+    let damage = enemy.attack;
+    if (isheavyAttack) {
+        damage *= 2;
+    }
     
-    let damage = Math.max(1, enemy.attack - playerDefence);
+    damage = Math.max(1, damage - playerDefence);
     if (gameState.combat.isDefending) { damage = Math.ceil(damage/2);}
     
     gameState.stats.health = Math.max(0, gameState.stats.health - damage);
@@ -45,7 +69,8 @@ export function enemyAttack(enemy) {
     return {
         damage : damage,
         playerHealth : gameState.stats.health,
-        defeated : gameState.stats.health == 0
+        defeated : gameState.stats.health == 0,
+        isHeavyAttack : isHeavyAttack
     };
 }
 
@@ -59,10 +84,15 @@ export function defend() {
 }
 
 export function observeEnemy(enemy) {
+    gameState.combat.enemyobserved = true;
+
     let message;
 
     if (enemy.behaviour === "watching"){
         message = `${enemy.name} watches you carefully. It may be waiting for you to make a move.`;
+    }
+    else if (enemy.behaviour == "recovering"){
+        message = `${enemy.name} is recovering after its attack. This may be your oppurtunity to escape.`;
     }
     else {
         message = `${enemy.name} is behaving unpredictably. Watch its movement carefully.`;
@@ -93,4 +123,22 @@ export function attemptFlee(enemy) {
         message : "The enemy prevents you escape."
     };
 }
+
+export function recoverStamina(){
+    const recoveryAmount = 30;
+
+    const previousStamina = gameState.stats.stamina;
+    gameState.stats.stamina = Math.min (gameState.stats.maxStamina, gameState.stats.stamina+recoveryAmount);
+
+    const recovered = gameState.stats.stamina - previousStamina;
+
+    return {
+        success : recovered > 0,
+        recovered : recovered,
+        message : recovered > 0
+            ?`You catch your breath and recover ${recovered} stamina.`
+            : "Your stamina is already full."
+    };
+}
+
 
