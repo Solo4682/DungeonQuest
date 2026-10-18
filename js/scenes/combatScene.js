@@ -4,7 +4,8 @@ import {
     enemyAttack,
     defend,
     observeEnemy,
-    attemptFlee
+    attemptFlee,
+    recoverStamina
 } from "../systems/combat.js";
 import { gameState } from "../gameState.js";
 import { useHealingPotion } from "../systems/inventory.js";
@@ -33,6 +34,7 @@ export function showCombatScene(game) {
         <button id = "defend-button"> Defend </button>
         <button id = "observe-button"> Observe Enemy </button>
         <button id = "flee-button"> Flee </button>
+        <button id = "recovery-button") Recover Stamina </button>
 
         <div id = "combat-log">
             The Hollow Sentinel blocks your path.
@@ -42,6 +44,7 @@ const attackButton = document.getElementById("attack-button");
 const defendButton = document.getElementById("defend-button");
 const observeButton = document.getElementById("observe-button");
 const fleeButton = document.getElementById("flee-button");
+const recoverButton = document.getElementById("recover-button");
 
 const potionButton = document.createElement("button");
 potionButton.id = "potion-button";
@@ -67,13 +70,14 @@ function endCombat(message) {
     observeButton.disabled = true;
     fleeButton.disabled = true;
     potionButton.disabled = true;
+    recoverButton.disabled = true;
 
     attackButton.style.display = "none";
     defendButton.style.display = "none";
     observeButton.style.display = "none";
     fleeButton.style.display = "none";
-    potionButton.style.diplay = "none";
-
+    potionButton.style.display = "none";
+    recoverButton.style.display = "none";
 }
 
 function enemyTurn() {
@@ -225,6 +229,21 @@ fleeButton.addEventListener("click", function () {
     }
 
     enemyTurn();
+
+    actionInProgress = false;
+});
+
+recoverButton.addEventListener("click", function () {
+    if (combatOver || actionInProgress) return;
+    actionInProgress = true;
+    const result = recoverStamina();
+
+    document.getElementById("combat-log").textContent = result.message;
+    updateDisplay();
+
+    if (result.success) {
+        enemyTurn();
+    }
 
     actionInProgress = false;
 });

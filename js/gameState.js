@@ -61,7 +61,8 @@ export const gameState = {
     },
 
     combat : {
-        isDefending : false
+        isDefending : false,
+        enemyObserved : false
     },
 
     worldFlags : {
