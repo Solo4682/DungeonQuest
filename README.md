@@ -17,7 +17,8 @@ Current updates until now : Initialization of the story.
                             Attack, defend, flee, recover, healing potion and observe options added to the fight interface
                             Enemy behaviors and gradual gaining of knowledge as story progresses by finding the hints.
 
-To run the project Locally : VS Code
+To run the project Locally : 
+                             VS Code
                              Live Server extension for VS code
 
 
