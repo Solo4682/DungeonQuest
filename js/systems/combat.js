@@ -54,10 +54,10 @@ export function enemyAttack(enemy) {
 
     enemy.attacksMade++;
 
-    const isheavyAttack = enemy.attacksMade % 3 == 0
+    const isHeavyAttack = enemy.attacksMade % 3 == 0
     let damage = enemy.attack;
-    if (isheavyAttack) {
-        damage *= 2;
+    if (isHeavyAttack) {
+        damage = Math.floor(damage * 1.5);
     }
     
     damage = Math.max(1, damage - playerDefence);
@@ -84,7 +84,7 @@ export function defend() {
 }
 
 export function observeEnemy(enemy) {
-    gameState.combat.enemyobserved = true;
+    gameState.combat.enemyObserved = true;
 
     let message;
 

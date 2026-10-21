@@ -124,3 +124,9 @@ input[type="text"]:focus-visible {
 #combat-log {
     white-space : pre-line;
 }
+
+#combat-actions button {
+    margin : 6px;
+    padding : 10px 16px;
+    cursor : pointer;
+}

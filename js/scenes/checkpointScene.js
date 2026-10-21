@@ -60,6 +60,7 @@ inspectCartButton.addEventListener("click" ,function () {
 
     lockChoices();
 
+    gameState.checkpointClues.cartWasStruck = true;
     checkpointResult.innerHTML = `
     
     <p> You examine the broken cart. One of its wooden panels has been forced inward. </p>
@@ -75,6 +76,7 @@ inspectTracksButton.addEventListener("click", function () {
 
     lockChoices(); 
 
+    gameState.checkpointClues.someoneLeftTheRoad = true;
     checkpointResult.innerHTML = `
     
     <p> You crouch beside the buddy road. Several sets of tracks cross one another. </p>
@@ -91,6 +93,7 @@ inspectSurroundingsButton.addEventListener ("click", function () {
 
     lockChoices(); 
 
+    gameState.checkpointClues.recentForestMovement = true;
     checkpointResult.innerHTML = `
     
     <p> You study the trees surrounding the cart. a low branch has been freshly broken. </p>

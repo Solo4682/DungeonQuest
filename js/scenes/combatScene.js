@@ -13,9 +13,15 @@ import { showCheckpointScene } from "./checkpointScene.js";
 
 export function showCombatScene(game) {
     const enemy = createEnemy() ;
+    const discoveredCartClue = gameState.checkpointClues.cartWasStruck;
+    const discoveredTracksClue = gameState.checkpointClues.someoneLeftTheRoad;
+    const discoveredForestClue = gameState.checkpointClues.recentForestMovement;
+
+
     let combatOver = false;
     let actionInProgress = false;
     game.innerHTML = `
+   
     <h1> COMBAT </h1>
     
     <section id = "enemy-panel">
@@ -34,12 +40,26 @@ export function showCombatScene(game) {
         <button id = "defend-button"> Defend </button>
         <button id = "observe-button"> Observe Enemy </button>
         <button id = "flee-button"> Flee </button>
-        <button id = "recovery-button") Recover Stamina </button>
+        <button id = "recover-button"> Catch Your breath (+30 Stamina) </button>
+    </section>
 
-        <div id = "combat-log">
-            The Hollow Sentinel blocks your path.
-        </div>
+    <div id = "combat-log">
+        The Hollow Sentinel blocks your path.
+    </div>
     `;
+
+    const combatLog = document.getElementById("combat-log");
+
+    if(discoveredCartClue) {
+        combatLog.textContent = "The Sentinel stands stands before you. Its damaged armour bears marks resembling the damage you found on the abandonded cart.";
+    }
+    else if (discoveredtracksClue) {
+        combatLog.textContent = "The Sentinel emerges from the trees, standing where the tracks dissapeared into the forest.";
+    }
+    else if (discoveredForestClue) {
+        combatLog.textContent = "The Sentinel steps from beneath a freshly broken branch. It seems to have been waiting in the forest.";
+    }
+
 const attackButton = document.getElementById("attack-button");
 const defendButton = document.getElementById("defend-button");
 const observeButton = document.getElementById("observe-button");
@@ -108,7 +128,7 @@ function enemyTurn() {
     document.getElementById("combat-log").textContent += `\n The ${enemy.name} attacks you for ${result.damage} damage. `;
 
     if(result.isHeavyAttack) {
-        combatLog.textContent  += `\n The Sentinel unleashes a powerful heavy strike!`;
+        document.getElementById("combat-log").textContent  += `\n The Sentinel unleashes a powerful heavy strike!`;
     }
 
 }
@@ -138,9 +158,10 @@ attackButton.addEventListener("click", function () {
         const continueButton = document.createElement("button");
         continueButton.textContent = "Continue";
 
-        continueButton.addEventListener("click", function() {
+        continueButton.addEventListener("click", function () {
             showCheckpointScene(game);
         });
+
         document.getElementById("combat-actions").appendChild(continueButton);
         
         return;
@@ -152,7 +173,15 @@ attackButton.addEventListener("click", function () {
     enemyTurn();
 
     actionInProgress = false;
-    attackButton.disabled = false;
+
+    if(!combatOver) {
+        attackButton.disabled = false;
+        defendButton.disabled = false;
+        observeButton.disabled = false;
+        fleeButton.disabled = false;
+        recoverButton.disabled = false;
+        potionButton.disabled = false;
+    }
 });
 
 defendButton.addEventListener("click", function () {
