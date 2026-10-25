@@ -1,5 +1,5 @@
 import { gameState } from "../gameState.js";
-import { showCheckpointScene } from "./checkpointScene.js";
+import { showKingdomRoadScene } from "./kingdomRoadScene.js";
 
 export function showAfterDunmereScene(game) {
 
@@ -94,7 +94,9 @@ export function showAfterDunmereScene(game) {
         continueButton.textContent = "Follow the road";
 
         continueButton.addEventListener("click", function () {
-            showCheckpointScene(game);
+            gameState.worldFlags.discoveredThirteenthDawn = gameState.discoveries.discoveredThirteenthDawn;
+
+            showKingdomRoadScene(game);
         });
 
         monumentResult.appendChild(continueButton);

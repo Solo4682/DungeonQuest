@@ -10,7 +10,7 @@ import {
 import { gameState } from "../gameState.js";
 import { useHealingPotion } from "../systems/inventory.js";
 import { showCheckpointScene } from "./checkpointScene.js";
-
+import { showEscapeScene } from "./escapeScene.js";
 export function showCombatScene(game) {
     const enemy = createEnemy() ;
     const discoveredCartClue = gameState.checkpointClues.cartWasStruck;
@@ -53,7 +53,7 @@ export function showCombatScene(game) {
     if(discoveredCartClue) {
         combatLog.textContent = "The Sentinel stands stands before you. Its damaged armour bears marks resembling the damage you found on the abandonded cart.";
     }
-    else if (discoveredtracksClue) {
+    else if (discoveredTracksClue) {
         combatLog.textContent = "The Sentinel emerges from the trees, standing where the tracks dissapeared into the forest.";
     }
     else if (discoveredForestClue) {
@@ -103,13 +103,19 @@ function endCombat(message) {
 function enemyTurn() {
     if(combatOver) return;
 
-    enemy.behaviour = "watching";
-
     const result = enemyAttack(enemy);
 
     if (result.defeated) {
         updateDisplay();
-        endCombat("You collapse. The enemy has defeated you.");
+        endCombat("You fall to the ground, unable to continue. The enemy stands over you.");
+
+        retryButton.addEventListener("click", function() {
+            gameState.stats.health = gameState.stats.maxHealth;
+            gameState.stats.stamina = gameState.stats.maxStamina;
+            showCombatScene(game);
+        });
+
+        document.getElementById("combat-actions").appendChild(retryButton);
         return;
     }
 
@@ -153,7 +159,7 @@ attackButton.addEventListener("click", function () {
 
     if(result.defeated){
         gameState.worldFlags.hollowSentinelDefeated = true;
-        endCombat(` The ${enemy.name} has been defeated!`);
+        endCombat(` The ${enemy.name} collapses, its damaged armour striking the earth.\n\n The forest falls silent. Whatever drove the Sentinel to guard this road, its purpose remains unknown. \n\n For now, the path ahead is clear. But the answers you seek lie beyond Dunmere.`);
 
         const continueButton = document.createElement("button");
         continueButton.textContent = "Continue";
@@ -249,7 +255,7 @@ fleeButton.addEventListener("click", function () {
         continueButton.textContent = "Continue";
 
         continueButton.addEventListener("click", function () {
-            showCheckpointScene(game);
+            showEscapeScene(game);
         });
 
         document.getElementById("combat-actions").appendChild(continueButton);
