@@ -52,7 +52,9 @@ export const gameState = {
     discoveries: {
         heardUndergroundBell : false,
         learnedAboutCovenantRecords : false,
-        discoveredThirteenthDawn : false
+        discoveredThirteenthDawn : false,
+        forestSymbolExamined : false,
+        foundHiddenArchway : false
     },
 
     checkpointClues : {
