@@ -29,7 +29,10 @@ export function playerAttack(enemy) {
     }
     gameState.stats.stamina -= attackCost;
 
-    const weaponBonus = gameState.equipment.weapon.attackBonus;
+    const weaponBonus = gameState.equipment.weapon?.attackBonus ??
+                        gameState.equipment.weapon?.damageBonus ??
+                        0;
+
     const totalAttack = gameState.stats.attack + weaponBonus;
   
     let damage = Math.max(1, totalAttack - enemy.defence);
@@ -50,11 +53,18 @@ export function playerAttack(enemy) {
 
 export function enemyAttack(enemy) {
 
-    const playerDefence = gameState.stats.defence + gameState.equipment.armour.defenceBonus;
+    const helmetDefence = gameState.equipment.helmet?.damageReduction ?? 0;
+    const chestplateDefence = gameState.equipment.chestplate?.damageReduction ?? 0;
+    const pantsDefence = gameState.equipment.pants?.damageReduction ?? 0;
+    const bootsDefence = gameState.equipment.boots?.damageReduction ?? 0;
+    const shieldDefence = gameState.equipment.shield?.damageReduction ?? 0;
+
+    const playerDefence = gameState.stats.defence + helmetDefence + chestplateDefence + pantsDefence + bootsDefence + shieldDefence;
 
     enemy.attacksMade++;
 
-    const isHeavyAttack = enemy.attacksMade % 3 == 0
+    const isHeavyAttack = enemy.attacksMade % 3 == 0;
+    
     let damage = enemy.attack;
     if (isHeavyAttack) {
         damage = Math.floor(damage * 1.5);

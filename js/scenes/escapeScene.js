@@ -1,4 +1,4 @@
-import {gameState} from "../gameState.js";
+import { showKingdomRoadScene } from "./kingdomRoadScene.js";
 
 export function showEscapeScene(game) {
     game.innerHTML = `
@@ -29,7 +29,11 @@ export function showEscapeScene(game) {
             <p> You have no idea what they mean. Not yet. </p>
             <p><em> Your journey continues... </em></p>
         </div>
-                
+        
+        <button id = "continue-beyond-dunmere"> Continue along the Kingdom Road </button>
         `;
+        document.getElementById("continue-beyond-dunmere").addEventListener("click", function () {
+            showKingdomRoadScene(game);
+        });
     });
 }

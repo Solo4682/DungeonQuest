@@ -9,7 +9,8 @@ import {
 } from "../systems/combat.js";
 import { gameState } from "../gameState.js";
 import { useHealingPotion } from "../systems/inventory.js";
-import { showCheckpointScene } from "./checkpointScene.js";
+import { generateLoot } from "../systems/loot.js";
+import { showBuriedThresholdScene } from "./buriedThresholdScene.js";
 import { showEscapeScene } from "./escapeScene.js";
 export function showCombatScene(game) {
     const enemy = createEnemy() ;
@@ -109,6 +110,9 @@ function enemyTurn() {
         updateDisplay();
         endCombat("You fall to the ground, unable to continue. The enemy stands over you.");
 
+        const retryButton = document.createElement("button");
+        retryButton.textContent = "Retry Encounter";
+
         retryButton.addEventListener("click", function() {
             gameState.stats.health = gameState.stats.maxHealth;
             gameState.stats.stamina = gameState.stats.maxStamina;
@@ -159,13 +163,28 @@ attackButton.addEventListener("click", function () {
 
     if(result.defeated){
         gameState.worldFlags.hollowSentinelDefeated = true;
+
+        const lootResult = generateLoot(enemy.id);
+
+        let rewardText = "";
+        if(lootResult.success && lootResult.rewards.length > 0) {
+            rewardText = "\n\nRewards obtained : ";
+
+            for(const reward of lootResult.rewards) {
+                rewardText += `\n- ${reward.name} x ${reward.quantity}`;
+            }
+        }
+        else {
+            rewardText = "\n\nNo rewards were obtained.";
+        }
+
         endCombat(` The ${enemy.name} collapses, its damaged armour striking the earth.\n\n The forest falls silent. Whatever drove the Sentinel to guard this road, its purpose remains unknown. \n\n For now, the path ahead is clear. But the answers you seek lie beyond Dunmere.`);
 
         const continueButton = document.createElement("button");
         continueButton.textContent = "Continue";
 
         continueButton.addEventListener("click", function () {
-            showCheckpointScene(game);
+            showBuriedThresholdScene(game);
         });
 
         document.getElementById("combat-actions").appendChild(continueButton);

@@ -36,17 +36,23 @@ export const gameState = {
             attackBonus : 2
         },
 
-        armour : {
-            id : "worn-clothes",
-            name : "Worn Clothes",
-            defenceBonus : 0
-        }
+        helmet : null,
+        chestplate : null,
+        pants : null,
+        boots : null,
+        shield : null,
+        accessory : null,
+
     },
 
     decisions : {
         approachedGuardCalmly : false,
         drewWeapon : false,
-        explorationChoice : ""
+        explorationChoice : "",
+        settlementChoice : "",
+        kingdomRoadChoice : "",
+        foresttrailChoice : "",
+        buriedThresholdChoice : ""
     },
 
     discoveries: {
@@ -54,7 +60,10 @@ export const gameState = {
         learnedAboutCovenantRecords : false,
         discoveredThirteenthDawn : false,
         forestSymbolExamined : false,
-        foundHiddenArchway : false
+        foundHiddenArchway : false,
+        settlementGateSymbolFound : false,
+        buriedEntranceExamined : false,
+        enteredBuriedStructure : false
     },
 
     checkpointClues : {
@@ -69,6 +78,9 @@ export const gameState = {
     },
 
     worldFlags : {
-        covenantSuspicion : 0
+        covenantSuspicion : 0,
+        hollowSentinelRewardClaimed : false
     }
+
+
 };

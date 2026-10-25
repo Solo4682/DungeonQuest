@@ -1,6 +1,9 @@
 import { gameState } from "../gameState.js";
+import { showBuriedThresholdScene } from "./buriedThresholdScene.js";
 
 export function showKingdomRoadScene(game) {
+
+    let roadActionInProgress = false;
 
     game.innerHTML = `
     <h1> THE DIVIDING ROAD </h1>
@@ -26,7 +29,17 @@ export function showKingdomRoadScene(game) {
         <div id = "road-result"> </div>
         
         `;
+
+      const roadButtons = [
+        document.getElementById("settlement-path"),
+        document.getElementById("forest-path")
+    ];
+    
     document.getElementById("settlement-path").addEventListener("click", function () {
+        
+        if(roadActionInProgress) return;
+        roadActionInProgress = true;
+
         gameState.decisions.kingdomRoadChoice = "settlement";
 
         document.getElementById("road-result").innerHTML = `
@@ -46,6 +59,9 @@ export function showKingdomRoadScene(game) {
         continueButton.textContent = "Approach the gate";
 
         continueButton.addEventListener("click", function () {
+            
+            let settlementActionInProgress = false;
+
             game.innerHTML = `
                 <h1> THE NAMELESS SETTLEMENT </h1>
                 <p class = "subtitle"> NO PLACE FOR THE DEAD </p>
@@ -76,6 +92,10 @@ export function showKingdomRoadScene(game) {
                 `; 
 
             document.getElementById("question-guard").addEventListener("click", function () {
+
+                if(settlementActionInProgress) return;
+                settlementActionInProgress = true;
+               
                 gameState.decisions.settlementChoice = "question-guard";
 
                 document.getElementById("settlement-result").innerHTML = `
@@ -90,9 +110,12 @@ export function showKingdomRoadScene(game) {
             });
 
             document.getElementById("inspect-gate").addEventListener("click", function () {
-                gameState.decisions.settlementChoice = "inspect-gate";
-                gameState.discoveries.settlementgateSymbolFound = true;
+
+                if(settlementActionInProgress) return;
+                settlementActionInProgress = true;
                 
+                gameState.decisions.settlementChoice = "inspect-gate";
+                gameState.discoveries.settlementGateSymbolFound = true;
 
                 document.getElementById("settlement-result").innerHTML = `
                     <div class = "story-text">
@@ -115,9 +138,16 @@ export function showKingdomRoadScene(game) {
     })
     
     document.getElementById("forest-path").addEventListener("click", function () {
+        
+        if(roadActionInProgress) return;
+        roadActionInProgress = true;
+        
         gameState.decisions.kingdomRoadChoice = "forest";
+
+        document.querySelector(".choices").remove();
         
         document.getElementById("road-result").innerHTML = `
+      
             <p> You step onto the old forest path. the markings on the stones grow more frequent as you travel deeper between the trees. </p>
             <p> One symbol catches your eye : a circle split by a single vertical line. </p>
             
@@ -136,8 +166,16 @@ export function showKingdomRoadScene(game) {
 
             <div id = "forest-result"> </div>
             `;
+            
+            const forestChoices = document.querySelector("#road-result .choices");
+
+            let forestActionInProgress = false;
         
         document.getElementById("inspect-symbol").addEventListener("click", function () {
+
+            if(forestActionInProgress) return;
+            forestActionInProgress = true;
+
             gameState.discoveries.forestSymbolExamined = true;
 
             document.getElementById("forest-result").innerHTML = `
@@ -155,12 +193,17 @@ export function showKingdomRoadScene(game) {
                 </div>
             `;
 
-            document.querySelector(".choices").remove();
+            forestChoices.remove();
         });
 
         document.getElementById("follow-trail").addEventListener("click", function () {
+
+            if(forestActionInProgress) return;
+            forestActionInProgress = true;
+            
             gameState.decisions.forestTrailChoice = "deeper";
             gameState.discoveries.foundHiddenArchway = true;
+
 
             document.getElementById("forest-result").innerHTML = `
                 <div class = "story-text">
@@ -172,7 +215,15 @@ export function showKingdomRoadScene(game) {
                 </div>
             `;
 
-            document.querySelector(".choices").remove();
+            forestChoices.remove();
+
+            const continueButton = document.createElement("button");
+            continueButton.textContent = "Approach the archway";
+            continueButton.addEventListener("click", function () {
+                showBuriedThresholdScene(game);
+            });
+
+            document.getElementById("forest-result").appendChild(continueButton);
         });
     });
 }
