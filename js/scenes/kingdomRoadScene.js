@@ -107,6 +107,15 @@ export function showKingdomRoadScene(game) {
                     </div>
                 `;
                 document.querySelector(".choices").remove();
+
+                const continueButton = document.createElementNS("button");
+                continueButton.textContent = "Leave the settlement gate";
+
+                continueButton.addEventListener ("click", function () {
+                    showKingdomRoadScene(game);
+                });
+
+                document.getElementById("settlement-result").appendChild(continueButton);
             });
 
             document.getElementById("inspect-gate").addEventListener("click", function () {
@@ -131,7 +140,16 @@ export function showKingdomRoadScene(game) {
                 `;
 
                 document.querySelector(".choices").remove();
-            })
+
+                const continueButton = document.createElement("button");
+                continueButton.textContent = "Leave the settlement gate";
+
+                continueButton.addEventListener("click", function () {
+                    showKingdomRoadScene(game);
+                });
+
+                document.getElementById("settlemenet-result").appensChild(continueButton)
+            });
         }); 
 
         document.getElementById("road-result").appendChild(continueButton);
@@ -220,7 +238,17 @@ export function showKingdomRoadScene(game) {
             const continueButton = document.createElement("button");
             continueButton.textContent = "Approach the archway";
             continueButton.addEventListener("click", function () {
-                showBuriedThresholdScene(game);
+                if (gameState.worldFlags.hollowSentinelDefeated) {
+                    showBuriedThresholdScene(game);
+                }
+                else {
+                    document.getElementById("forest-result").innerHTML += `
+                        <div class = "story-test">
+                            <p> A metallic scrape echoes from somewhere behind the trees. </p>
+                            <p> The Sentinel is still alive. Whatever lies beyond the archway, it has not abandoned its watch. </p>
+                        </div>
+                    `;
+                }
             });
 
             document.getElementById("forest-result").appendChild(continueButton);

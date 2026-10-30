@@ -1,55 +1,39 @@
+//Scene 1
 import { gameState } from "../gameState.js";
-import { showCharacterCreationScene } from "./characterCreationScene.js";
+import { navigateTo } from "../router.js";
 
 export function showDunmereScene(game) {
 
     game.innerHTML = `
 
     <h1>DUNMERE</h1>
-
     <p class = "subtitle"> THE BELL THAT RANG UNDERGROUND </p>
-
     <p> Rain falls over the village. </p>
-
-    <p>
-        At the entrance stands a woman holding a lantern.
-        She looks at you, drops it, and runs away in fear.
-    </p>
-
+    <p>At the entrance stands a woman holding a lantern.\n\nShe looks at you, drops it, and runs away in fear.</p>
     <p> Before you can follow her, the village bell starts ringing. </p>
-
     <p>
         Once.<br>
         Twice.<br>
         ...Thirteen times.
     </p>
-
     <p>
         The villagers close their shutters.
         A child begins crying.
         Somewhere beneath the church, something answers the bell.
     </p>
-
     <p> A village guard approaches you. </p>
-
     <p> "You're supposed to be dead." he murmurs. </p>
-
     <p> He looks at your face again just to confirm if he had previously seen wrong. </p>
-
     <p>
         He slowly whispers to himself,
         "I'm sorry. I mean... I was told you were dead."
     </p>
-
     <p> He reaches for the sword at his side. </p>
-
     <p> "Please don't make me find out which version of the story is true." </p>
-
     <div class = "choices">
         <button id = "calm-choice">
             Lower your weapon. I don't want trouble.
         </button>
-
         <button id = "aggressive-choice">
             Draw your blade for I shall not be stopped.
         </button>
@@ -86,7 +70,7 @@ calmChoice.addEventListener ("click", function () {
         `;
 
 document.getElementById("continue-button").addEventListener("click", function () {
-    showCharacterCreationScene(game);
+    navigateTo("character");
 })
 
 });
@@ -123,7 +107,7 @@ aggressiveChoice.addEventListener("click", function () {
     `;
 
 document.getElementById("continue-button").addEventListener("click", function () {
-    showCharacterCreationScene(game);
+    navigateTo("character");
 })
 });
 }

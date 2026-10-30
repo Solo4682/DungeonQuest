@@ -1,5 +1,5 @@
 import { gameState } from "../gameState.js";
-import { showCombatScene } from "./combatScene.js";
+import { navigateTo } from "../router.js";
 
 export function showCheckpointScene(game) {
 
@@ -44,7 +44,7 @@ function showContinueButton() {
     continueButton.textContent = "Continue along the road";
 
     continueButton.addEventListener("click", function () {
-        showCombatScene(game);
+        navigateTo("combat");
     });
 
     checkpointResult.appendChild(continueButton);

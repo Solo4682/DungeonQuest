@@ -1,5 +1,5 @@
 import { gameState } from "../gameState.js";
-import { showAfterDunmereScene } from "./afterDunmereScene.js";
+import { navigateTo } from "../router.js";
 
 export function showFirstExplorationScene(game) {
 
@@ -77,7 +77,7 @@ function lockChoices() {
         document
             .getElementById("continue-button")
             .addEventListener("click",function () {
-                showAfterDunmereScene(game);
+                navigateTo("after-dunmere");
             });
 
 });
@@ -105,7 +105,7 @@ questionButton.addEventListener ( "click", function () {
     document   
         .getElementById("continue-button")
         .addEventListener("click", function() {
-            showAfterDunmereScene(game);
+            navigateTo("after-dunmere");;
         });
 });
 
@@ -133,8 +133,8 @@ churchButton.addEventListener ("click", function() {
     document
         .getElementById("continue-button")
         .addEventListener("click", function () {
-            showAfterDunmereScene(game)
-        });
+            navigateTo("after-dunmere");
+                });
 });
 
 }

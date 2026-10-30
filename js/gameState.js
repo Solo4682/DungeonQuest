@@ -51,7 +51,7 @@ export const gameState = {
         explorationChoice : "",
         settlementChoice : "",
         kingdomRoadChoice : "",
-        foresttrailChoice : "",
+        forestTrailChoice : "",
         buriedThresholdChoice : ""
     },
 
@@ -79,7 +79,8 @@ export const gameState = {
 
     worldFlags : {
         covenantSuspicion : 0,
-        hollowSentinelRewardClaimed : false
+        hollowSentinelRewardClaimed : false,
+        hollowSentinelDefeated : false
     }
 
 

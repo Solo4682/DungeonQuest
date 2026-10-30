@@ -10,8 +10,8 @@ import {
 import { gameState } from "../gameState.js";
 import { useHealingPotion } from "../systems/inventory.js";
 import { generateLoot } from "../systems/loot.js";
-import { showBuriedThresholdScene } from "./buriedThresholdScene.js";
-import { showEscapeScene } from "./escapeScene.js";
+import { navigateTo } from "../router.js";
+
 export function showCombatScene(game) {
     const enemy = createEnemy() ;
     const discoveredCartClue = gameState.checkpointClues.cartWasStruck;
@@ -184,7 +184,7 @@ attackButton.addEventListener("click", function () {
         continueButton.textContent = "Continue";
 
         continueButton.addEventListener("click", function () {
-            showBuriedThresholdScene(game);
+            navigateTo("buried-threshold");
         });
 
         document.getElementById("combat-actions").appendChild(continueButton);
@@ -274,7 +274,7 @@ fleeButton.addEventListener("click", function () {
         continueButton.textContent = "Continue";
 
         continueButton.addEventListener("click", function () {
-            showEscapeScene(game);
+            navigateTo("escape");
         });
 
         document.getElementById("combat-actions").appendChild(continueButton);

@@ -1,5 +1,6 @@
+//Scene 2 
 import {gameState } from "../gameState.js";
-import { showFirstExplorationScene } from "./firstExplorationScene.js";
+import { navigateTo } from "../router.js";
 
 export function showCharacterCreationScene(game) {
 
@@ -71,14 +72,14 @@ continueButton.addEventListener("click", function () {
 
 document.getElementById("begin-exploration-button")
     .addEventListener("click", function () {
-        showFirstExplorationScene(game)
-    });
+        navigateTo("first-exploration");
+        });
 });
 
 }
 
 function escapeHTML(text) {
-    return text.replace(/[&<>"`]/g, function (character) {
+    return text.replace(/[&<>"'`]/g, function (character) {
         const replacements = {
             "&": "&amp;",
             "<": "&lt;",

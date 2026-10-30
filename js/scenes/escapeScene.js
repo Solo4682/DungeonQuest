@@ -1,4 +1,5 @@
 import { showKingdomRoadScene } from "./kingdomRoadScene.js";
+import { navigateTo } from "../router.js";
 
 export function showEscapeScene(game) {
     game.innerHTML = `
